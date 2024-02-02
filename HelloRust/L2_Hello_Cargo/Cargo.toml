@@ -1,0 +1,12 @@
+# .toml 是cargo配置的文件格式
+
+# [package] 区域标题, 保存着项目的一些基本信息
+[package]
+name = "L2_Hello_Cargo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+# [dependencies] 区域标题, 这里会列出项目的依赖项
+[dependencies]
