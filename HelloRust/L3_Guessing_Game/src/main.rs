@@ -1,16 +1,38 @@
 use std::io;
+use rand::Rng;
+use std::cmp::Ordering;
 
 fn main() {
     /* 猜数字游戏 */
     println!("猜数游戏开始!");
 
-    println!("猜一个数!");
-    
-    let mut guess = String::new();
-    
-    io::stdin().read_line(&mut guess).expect("无法读取行");
+    let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("你猜测的数是: {}", guess);
+    // println!("神秘数字是{}", secret_number);
+
+    loop {
+        println!("猜一个数!");
+    
+        let mut guess = String::new();
+        
+        io::stdin().read_line(&mut guess).expect("无法读取行");
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(number) => number,
+            Err(_) => continue
+        };
+
+        println!("你猜测的数是: {}", guess);
+        
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("To small"),
+            Ordering::Greater => println!("To big"),
+            Ordering::Equal => {
+                println!("You WIN!!!!");
+                break;
+            },
+        }
+    }
 }
 
 /* 
@@ -33,5 +55,26 @@ fn main() {
 
     expect() 会返回一个 io::Result , Result本质就是一个枚举, 其有两个值: Ok, Err
     返回Ok表示成功, 同时会返回值; 如果返回的是Err就表示失败了, 在Err会附带错误信息.
+
+
+    // ===== ===== ===== ===== ===== ===== ===== ===== ===== //
+    https://crates.io/  Rust carte的管理网站
+
+    rand::Rng   是一个trait(有点类似于其他语言的接口), 内置了很多方法.
+    
+    rand::thread_rng() 会返回一个ThreadRag, 这是一个随机数生成器(该随机数生成器是在本地线程空间的)
+    gen_range(1, 101)   获取一个随机数, 范围包括1, 不包括101
+
+    std::cmp::Ordering 是个枚举类型, 该枚举有三个值, Less小于 Greater大于 Equal等于
+    
+    match 类似于一个匹配机, 会更具表达式中的值, 匹配一个arm(手臂), 
+
+    guess.cmp() 一个比较方法, 会对比传入的值, 并返回一个Ordering
+
+
+    let guess: u32 = guess.trim().parse()
+    在rust里是允许对变量进行再声明的, 其通过隐藏(shadow)原变量的方式实现;一般用于实现变量的类型转换.
+    trim() 方法, 清除字符串空白; parse() 将字符串转换为 数值(int)
+                                                    
 
 */
