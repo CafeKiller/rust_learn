@@ -32,7 +32,36 @@ fn main() {
     let s2 = s1.clone();
     println!("s1 = {}, s2 = {}", s1, s2); // s2 克隆了s1的值, 此时s1的值没有被移动, 所以可以正常访问.
 
+    fn1(s1);
+    fn2(y); 
+    // println!("s1 = {}", s1); // 此时s1的值已经被移动了, s1无法使用. 此处代码运行时会报错
+    println!("y = {}", y); // y是整数标量, 使用的是clone, 即使被函数使用, 也不会移动. 
 
+    let s2 = fn3(s2);
+    println!("s2 = {}", s2); // 此处s2本来是被fn3函数移动了, 但fn3又返回了回来, 我们再通过变量接收就可以继续访问了
+
+    let (s3, l) = fn4(s2);
+    println!("s3 value is {}, lenght is {}", s3, l);
+
+}
+
+fn fn1(str: String) {
+    println!("function str = {}", str)
+}
+
+fn fn2(number: i32) {
+    println!("function number = {}", number)
+}
+
+fn fn3(str: String) -> String {
+    println!("function str = {}", str);
+    str
+}
+
+fn fn4(str: String) -> (String, usize)  {
+    println!("function str = {}", str);
+    let len = str.len();
+    (str, len)
 }
 
 
@@ -130,4 +159,18 @@ fn main() {
             如果一个类型拥有 Copy trait，一个旧的变量在将其赋值给其他变量后仍然可用。
             Rust 不允许自身或其任何部分实现了 Drop trait 的类型使用 Copy trait。
             如果我们对其值离开作用域时需要特殊处理的类型使用 Copy 注解，将会出现一个编译时错误。
+
+
+        所有权与函数
+            将值传递给函数在语义上与给变量赋值相似。
+            向函数传递值可能会移动或者复制，就像赋值语句一样。   
+
+
+        返回值与作用域
+            返回值也可以转移所有权。
+            变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。
+            当持有堆中数据值的变量离开作用域时，其值将通过 drop 被清理掉，除非数据被移动为另一个变量所有。
+
+
+        
 */
