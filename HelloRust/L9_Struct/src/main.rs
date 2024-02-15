@@ -35,8 +35,53 @@ fn main() {
     let black = Color(0, 0, 0);
     let origin = Point(0, 0, 0);
 
+
+    let width1 = 30;
+    let height1 = 50;
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(width1, height1)
+    );
+    
+    // 使用元组进行重构
+    let rect1 = (30, 50);
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area1(rect1)
+    );
+
+    // 使用结构体重构：赋予更多意义
+    let rect1 = Rectangle { width: 30, height: 50 };
+    println!(
+        "The area of the rectangle is {} square pixels.", 
+        area2(&rect1)
+    );
+    
+    // 通过派生 trait 增加实用功能
+    let rect1 = Rectangle { width: 30, height: 50 };
+    println!("rect1 is {:?}", rect1); // 此处直接运行会产生错误: `Rectangle` doesn't implement `std::fmt::Display`
+    // 此处需要使用 {:?} 占位符
+
 }
 
+// 将此行代码加入后就不会出现: `Rectangle` doesn't implement `std::fmt::Display` 错误了
+#[derive(Debug)] 
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn area(width: u32, height: u32) -> u32 {
+    width * height
+}
+
+fn area1(dimensions: (u32, u32)) -> u32 {
+    dimensions.0 * dimensions.1
+}
+
+fn area2(rectangle: &Rectangle) -> u32 {
+    rectangle.width * rectangle.height
+}
 /* 
     知识点:
 
